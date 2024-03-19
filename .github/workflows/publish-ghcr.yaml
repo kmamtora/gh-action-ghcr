@@ -19,6 +19,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
       
+      - name: Get Branch
+        id: branch
+        run: echo "git_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_BRANCH
+
+      - name: Check Branch
+        run: echo "${{ env.branch }}"
+
+      - name: Get Hash
+        id: hash
+        run: echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+
+      - name: Check Hash
+        run: echo "${{ env.hash }}"
+      
       - name: Build Docker image for GitHub Container Registry
         run: |
           docker build . -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
