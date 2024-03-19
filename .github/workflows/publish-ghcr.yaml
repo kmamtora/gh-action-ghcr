@@ -21,8 +21,10 @@ jobs:
       
       - name: Build Docker image for GitHub Container Registry
         run: |
-          docker build . -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_${{ github.ref_name }}:${{ github.sha | slice(0, 6) }}
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-6)
+          docker build . -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_${{ github.ref_name }}:${SHORT_SHA}
 
       - name: Push Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_${{ github.ref_name }}:${{ github.sha | slice(0, 6) }}
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-6)
+          docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_${{ github.ref_name }}:${SHORT_SHA}
